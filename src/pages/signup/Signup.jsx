@@ -1,13 +1,14 @@
 import { Link as ChakraLink, Container, Box, useToast, Stack, FormControl, FormLabel, Input, FormHelperText, Select, InputGroup, InputRightElement, Button } from '@chakra-ui/react';
 import axios from 'axios';
 import { useState } from 'react';
-import { Link as ReactRouterLink } from 'react-router-dom'
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'
 
 const Signup = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
+  const navigate = useNavigate();
   const [credentials, setCredentials] = useState({
     fullname: "",
     username: "",
@@ -80,7 +81,7 @@ const Signup = () => {
       return
     }
 
-    if (credentials.role.length < 6) {
+    if (credentials.role.length !== 0) {
       toast({
         position: 'top',
         title: "Please select your role",
@@ -107,6 +108,8 @@ const Signup = () => {
           role: credentials.role,
         }
       });
+      navigate('/login')
+
       toast({
         position: 'top',
         title: "User has been registered successfully",

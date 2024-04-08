@@ -1,13 +1,14 @@
 import { Link as ChakraLink, Container, Box, useToast, Stack, FormControl, FormLabel, Input, FormHelperText, InputGroup, InputRightElement, Button } from '@chakra-ui/react';
 import axios from 'axios';
 import { useState } from 'react';
-import { Link as ReactRouterLink } from 'react-router-dom'
+import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
+  const navigate = useNavigate();
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -68,15 +69,16 @@ const Login = () => {
           password: credentials.password,
         }
       });
-      console.log(response)
 
       localStorage.setItem('token', response.data.authToken);
       localStorage.setItem('user', response.data.data._id);
       localStorage.setItem('role', response.data.data.role);
 
-      console.log(localStorage.getItem("role"));
-      console.log(localStorage.getItem("user"));
-      console.log(localStorage.getItem("token"));
+      if (localStorage.getItem('role') === "admin") {
+        navigate('/adminhome')
+      } else {
+        navigate('/studenthome')
+      }
 
       toast({
         position: 'top',

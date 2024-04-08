@@ -3,6 +3,7 @@ import Signup from "./pages/signup/Signup";
 import Login from "./pages/login/Login";
 import Header from "./components/header/Header";
 import { Box } from '@chakra-ui/react';
+import AdminHome from "./pages/admin_home/AdminHome";
 
 const App = () => {
   return (
@@ -11,8 +12,8 @@ const App = () => {
       <Box mt={5} />
       <Routes>
         <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-
+        <Route path="/" element={<Login />} />
+        <Route path="/adminhome" element={<AdminHome />} />
       </Routes>
     </>
   );
