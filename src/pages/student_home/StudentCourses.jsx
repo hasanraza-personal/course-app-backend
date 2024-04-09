@@ -3,47 +3,12 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FileEarmarkPdfFill } from 'react-bootstrap-icons';
 
-const AllCourses = () => {
+
+const StudentCourses = () => {
   const toast = useToast();
   const [courses, setCourses] = useState([]);
+  console.log('courses: ', courses);
   const [studentData, setStudentData] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const handleDelete = async (id) => {
-    try {
-      await axios({
-        method: 'POST',
-        url: '/courses/deletecourse',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        data: {
-          courseid: id
-        }
-      });
-
-      let updatedCourses = courses.filter((course) => course._id !== id)
-      setCourses(updatedCourses);
-
-      toast({
-        position: 'top',
-        title: "Course deleted successfully",
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-      setLoading(false);
-    } catch (error) {
-      toast({
-        position: 'top',
-        title: error.response.data.error,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      setLoading(false);
-    }
-  }
 
   const handleEnroll = async (id) => {
     try {
@@ -140,13 +105,16 @@ const AllCourses = () => {
     try {
       const response = await axios({
         method: 'GET',
-        url: 'courses/showcourses',
+        url: 'courses/showenrollcourse',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
       });
-      setCourses(response.data.courses);
+      if (response.data.enrolledCourses) {
+        setCourses(response.data.enrolledCourses);
+      }
     } catch (error) {
+      console.log('error: ', error);
       toast({
         position: 'top',
         title: error.response.data.error,
@@ -162,6 +130,7 @@ const AllCourses = () => {
     localStorage.getItem("role") === "student" && getStudent();
     // eslint-disable-next-line
   }, [])
+
 
   if (courses.length > 0) {
     return (
@@ -198,71 +167,36 @@ const AllCourses = () => {
                   <Heading size='xs' textTransform='uppercase'>
                     PDF File
                   </Heading>
-                  {/* Show PDF to admin */}
-                  {localStorage.getItem("role") === "admin" && <>
-                    {course.adminid === localStorage.getItem("user") ? <>
-                      <Flex alignItems="center" gap={2}>
-                        <FileEarmarkPdfFill />
-                        <Text pt='2' fontSize='sm'>
-                          <Link href={course.pdf} isExternal>
-                            Click to view
-                          </Link>
-                        </Text>
-                      </Flex>
-                    </> : <>
-                      <Text pt='2' fontSize='sm'>
-                        Only authorized admin can see their PDF document
-                      </Text>
-                    </>}
-                  </>}
 
                   {/* Show PDF to student */}
-                  {localStorage.getItem("role") === "student" && <>
-                    {studentData.includes(course._id) ? <>
-                      <Flex alignItems="center" gap={2}>
-                        <FileEarmarkPdfFill />
-                        <Text pt='2' fontSize='sm'>
-                          <Link href={course.pdf} isExternal>
-                            Click to view
-                          </Link>
-                        </Text>
-                      </Flex>
-                    </> : <>
-                      <Text pt='2' fontSize='sm'>
-                        In order to view this course PDF, please enroll in this course
-                      </Text>
-                    </>}
-                  </>}
+                  <Flex alignItems="center" gap={2}>
+                    <FileEarmarkPdfFill />
+                    <Text pt='2' fontSize='sm'>
+                      <Link href={course.pdf} isExternal>
+                        Click to view
+                      </Link>
+                    </Text>
+                  </Flex>
                 </Box>
 
-                {/* Show delete option to admin */}
-                {(course.adminid === localStorage.getItem("user") && localStorage.getItem("role") === "admin") &&
+                {/* Show enroll and disenroll option to student */}
+                {studentData.includes(course._id) ? <>
                   <Box>
                     <Heading size='xs' textTransform='uppercase'>
-                      Delete this course
+                      Take action
                     </Heading>
-                    <Button isLoading={loading} colorScheme='red' size='xs' mt="2" onClick={() => handleDelete(course._id)}>Delete</Button>
-                  </Box>}
+                    <Button colorScheme='red' size='xs' mt="2" onClick={() => handleDisenroll(course._id)}>Disenroll From This Course</Button>
+                  </Box>
+                </> : <>
+                  <Box>
+                    <Heading size='xs' textTransform='uppercase'>
+                      Take action
+                    </Heading>
+                    <Button colorScheme='whatsapp' size='xs' mt="2" onClick={() => handleEnroll(course._id)}>Enroll In This Course</Button>
+                  </Box>
+                </>
+                }
 
-                {/* Show enroll and disenroll option to student */}
-                {localStorage.getItem("role") === "student" && <>
-                  {studentData.includes(course._id) ? <>
-                    <Box>
-                      <Heading size='xs' textTransform='uppercase'>
-                        Take action
-                      </Heading>
-                      <Button isLoading={loading} colorScheme='red' size='xs' mt="2" onClick={() => handleDisenroll(course._id)}>Disenroll From This Course</Button>
-                    </Box>
-                  </> : <>
-                    <Box>
-                      <Heading size='xs' textTransform='uppercase'>
-                        Take action
-                      </Heading>
-                      <Button isLoading={loading} colorScheme='whatsapp' size='xs' mt="2" onClick={() => handleEnroll(course._id)}>Enroll In This Course</Button>
-                    </Box>
-                  </>
-                  }
-                </>}
               </Stack>
             </CardBody>
           </Card >
@@ -276,7 +210,6 @@ const AllCourses = () => {
       </Heading>
     </>)
   }
-
 }
 
-export default AllCourses
+export default StudentCourses

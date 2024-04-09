@@ -2,6 +2,7 @@ import { Link as ChakraLink, Container, Box, useToast, Stack, FormControl, FormL
 import axios from 'axios';
 import { useState } from 'react';
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'
+import "./login.css"
 
 const Login = () => {
   const [show, setShow] = useState(false);
@@ -102,39 +103,39 @@ const Login = () => {
 
   return (
     <>
-      <Container shadow='xs' bg='#fff' mt='1px'>
-        <Box p='15px 15px 20px 15px' borderRadius='15px'>
-          <Box fontWeight='bold' fontSize='1.6rem' mb='5px'>Please login here!</Box>
+      <Box className="login-container" minHeight="100vh" display="flex" alignItems="center" justifyContent="center">
+        <Container className="login-form">
+          <Box className="login-title">Login page</Box>
           <Stack spacing='10px'>
-            <FormControl>
-              <FormLabel>Email address</FormLabel>
-              <Input type='email' name="email" onChange={onChange} />
-              <FormHelperText>We'll never share your email.</FormHelperText>
+            <FormControl className="form-control">
+              <FormLabel>Userid</FormLabel>
+              <Input type='email' name="email" onChange={onChange} placeholder='Enter your userid' />
             </FormControl>
 
-            <InputGroup size='md'>
-              <Input
-                pr='4.5rem'
-                type={show ? 'text' : 'password'}
-                placeholder='Enter password'
-                name="password"
-                onChange={onChange}
-              />
-              <InputRightElement width='4.5rem'>
-                <Button h='1.75rem' size='sm' onClick={handleClick}>
-                  {show ? 'Hide' : 'Show'}
-                </Button>
-              </InputRightElement>
-            </InputGroup>
+            <FormControl className="form-control">
+              <FormLabel>Password</FormLabel>
+              <InputGroup size='md'>
+                <Input
+                  pr='4.5rem'
+                  type={show ? 'text' : 'password'}
+                  placeholder='Enter password'
+                  name="password"
+                  onChange={onChange}
+                />
+                <InputRightElement width='4.5rem'>
+                  <Button h='1.75rem' size='sm' onClick={handleClick}>
+                    {show ? 'Hide' : 'Show'}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+            </FormControl>
           </Stack>
-          <Button colorScheme='blue' isLoading={loading} w="100%" mt={8} onClick={handleSubmit}>Login</Button>
-          <Box mt={2}>
-            <ChakraLink as={ReactRouterLink} to='/signup'>
-              Don't have an account? Signup
-            </ChakraLink>
+          <Button className="login-button" colorScheme='blue' isLoading={loading} w="100%" onClick={handleSubmit}>Login</Button>
+          <Box className="signup-link">
+            <ChakraLink as={ReactRouterLink} to='/signup'>Don't have an account? Signup</ChakraLink>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      </Box>
     </>
   )
 }

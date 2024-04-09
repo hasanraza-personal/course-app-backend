@@ -1,11 +1,12 @@
-import { Link as ChakraLink, Tabs, Tab, Container, TabList, TabPanels, TabPanel, Box, useToast, Stack, FormControl, FormLabel, Input, FormHelperText, Select, InputGroup, InputRightElement, Button } from '@chakra-ui/react';
+import { Tabs, Tab, Container, TabList, TabPanels, TabPanel } from '@chakra-ui/react';
 import AllCourses from '../../components/allcourses/AllCourses';
+import AdminCourses from './AdminCourses';
 
 
 const AdminHome = () => {
   return (
     <Container shadow='xs' bg='#fff' mt='1px'>
-      <Tabs>
+      <Tabs isFitted variant='enclosed' isLazy colorScheme='green'>
         <TabList>
           <Tab>All courses</Tab>
           <Tab>My courses</Tab>
@@ -16,7 +17,7 @@ const AdminHome = () => {
             <AllCourses />
           </TabPanel>
           <TabPanel>
-            <p>two!</p>
+            <AdminCourses />
           </TabPanel>
 
         </TabPanels>

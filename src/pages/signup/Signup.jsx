@@ -2,6 +2,7 @@ import { Link as ChakraLink, Container, Box, useToast, Stack, FormControl, FormL
 import axios from 'axios';
 import { useState } from 'react';
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom'
+import './signup.css'
 
 const Signup = () => {
   const [show, setShow] = useState(false);
@@ -26,10 +27,10 @@ const Signup = () => {
   }
 
   const handleSubmit = async () => {
-    if (credentials.fullname.trim().length < 5) {
+    if (credentials.fullname.trim().length === 0) {
       toast({
         position: 'top',
-        title: "Name should be atleast 5 characters long",
+        title: "Name cannot be blank",
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -37,10 +38,10 @@ const Signup = () => {
       return
     }
 
-    if (credentials.username.trim().length < 5) {
+    if (credentials.username.trim().length === 0) {
       toast({
         position: 'top',
-        title: "Username should be atleast 5 characters long",
+        title: "Username cannot be blank",
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -70,10 +71,10 @@ const Signup = () => {
       return
     }
 
-    if (credentials.password.length < 6) {
+    if (credentials.password.length === 0) {
       toast({
         position: 'top',
-        title: "Password must contain atleast 6 characters",
+        title: "Password cannot be blank",
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -81,7 +82,7 @@ const Signup = () => {
       return
     }
 
-    if (credentials.role.length !== 0) {
+    if (credentials.role.length === 0) {
       toast({
         position: 'top',
         title: "Please select your role",
@@ -108,7 +109,7 @@ const Signup = () => {
           role: credentials.role,
         }
       });
-      navigate('/login')
+      navigate('/')
 
       toast({
         position: 'top',
@@ -132,27 +133,27 @@ const Signup = () => {
 
   return (
     <>
-      <Container shadow='xs' bg='#fff' mt='1px'>
-        <Box p='15px 15px 20px 15px' borderRadius='15px'>
-          <Box fontWeight='bold' fontSize='1.6rem' mb='5px'>Please register here!</Box>
-          <Stack spacing='10px'>
-            <FormControl isRequired>
+      <Box className="registration-container">
+        <Container className="registration-form">
+          <Box className="registration-title">Please register here!</Box>
+          <Stack spacing='20px'>
+            <FormControl isRequired className="form-control">
               <FormLabel>Fullname</FormLabel>
               <Input placeholder='Fullname' name="fullname" onChange={onChange} />
             </FormControl>
 
-            <FormControl isRequired>
+            <FormControl isRequired className="form-control">
               <FormLabel>Username</FormLabel>
               <Input placeholder='Username' name="username" onChange={onChange} />
             </FormControl>
 
-            <FormControl>
+            <FormControl className="form-control">
               <FormLabel>Email address</FormLabel>
               <Input type='email' name="email" onChange={onChange} />
-              <FormHelperText>We'll never share your email.</FormHelperText>
+              <FormHelperText className="form-helper-text">We'll never share your email.</FormHelperText>
             </FormControl>
 
-            <InputGroup size='md'>
+            <InputGroup size='md' className="form-control">
               <Input
                 pr='4.5rem'
                 type={show ? 'text' : 'password'}
@@ -167,7 +168,7 @@ const Signup = () => {
               </InputRightElement>
             </InputGroup>
 
-            <FormControl>
+            <FormControl className="form-control">
               <FormLabel>Role</FormLabel>
               <Select placeholder='Select role' name="role" onChange={onChange}>
                 <option>admin</option>
@@ -175,14 +176,12 @@ const Signup = () => {
               </Select>
             </FormControl>
           </Stack>
-          <Button colorScheme='blue' isLoading={loading} w="100%" mt={8} onClick={handleSubmit}>Register</Button>
-          <Box mt={2}>
-            <ChakraLink as={ReactRouterLink} to='/login'>
-              Already have an account? Login
-            </ChakraLink>
+          <Button className="register-button" colorScheme='blue' isLoading={loading} w="100%" onClick={handleSubmit}>Register</Button>
+          <Box className="login-link">
+            <ChakraLink as={ReactRouterLink} to='/'>Already have an account? Login</ChakraLink>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      </Box>
     </>
   )
 }
